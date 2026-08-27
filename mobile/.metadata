@@ -1,0 +1,33 @@
+version:
+  revision: "d693b4b9dbac2acd4477aea4555ca6dcbea44ba2"
+  channel: "stable"
+
+project_type: app
+
+migration:
+  platforms:
+    - platform: root
+      create_revision: d693b4b9dbac2acd4477aea4555ca6dcbea44ba2
+      base_revision: d693b4b9dbac2acd4477aea4555ca6dcbea44ba2
+    - platform: android
+      create_revision: d693b4b9dbac2acd4477aea4555ca6dcbea44ba2
+      base_revision: d693b4b9dbac2acd4477aea4555ca6dcbea44ba2
+    - platform: ios
+      create_revision: d693b4b9dbac2acd4477aea4555ca6dcbea44ba2
+      base_revision: d693b4b9dbac2acd4477aea4555ca6dcbea44ba2
+    - platform: linux
+      create_revision: d693b4b9dbac2acd4477aea4555ca6dcbea44ba2
+      base_revision: d693b4b9dbac2acd4477aea4555ca6dcbea44ba2
+    - platform: macos
+      create_revision: d693b4b9dbac2acd4477aea4555ca6dcbea44ba2
+      base_revision: d693b4b9dbac2acd4477aea4555ca6dcbea44ba2
+    - platform: web
+      create_revision: d693b4b9dbac2acd4477aea4555ca6dcbea44ba2
+      base_revision: d693b4b9dbac2acd4477aea4555ca6dcbea44ba2
+    - platform: windows
+      create_revision: d693b4b9dbac2acd4477aea4555ca6dcbea44ba2
+      base_revision: d693b4b9dbac2acd4477aea4555ca6dcbea44ba2
+
+  unmanaged_files:
+    - 'lib/main.dart'
+    - 'ios/Runner.xcodeproj/project.pbxproj'

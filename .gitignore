@@ -1,0 +1,28 @@
+# Flutter y Dart
+mobile/.dart_tool/
+mobile/build/
+mobile/.flutter-plugins
+mobile/.flutter-plugins-dependencies
+mobile/.packages
+mobile/.idea/
+mobile/.vscode/
+mobile/android/.gradle/
+mobile/android/build/
+mobile/android/app/build/
+mobile/ios/Flutter/ephemeral/
+mobile/linux/flutter/ephemeral/
+mobile/macos/Flutter/ephemeral/
+mobile/windows/flutter/ephemeral/
+
+# Configuración local y secretos
+.env
+.env.*
+*.pem
+*.key
+*.keystore
+*.jks
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+*.log

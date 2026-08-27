@@ -1,0 +1,436 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>QualyTech - Panel Clinico</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/main.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/dashboard.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-config.js"></script>
+  </head>
+
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" id="sidebar"></aside>
+
+      <div class="workspace">
+        <header class="topbar">
+          <div>
+            <h1 class="topbar-title" id="viewTitle">Panel Clinico QualyTech</h1>
+            <p class="topbar-subtitle" id="viewSubtitle">
+              Sistema de administracion y control motriz IoT
+            </p>
+          </div>
+
+          <div class="topbar-actions">
+            <button
+              class="icon-btn"
+              id="themeToggle"
+              type="button"
+              aria-label="Cambiar tema"
+            >
+              <span id="themeToggleGlyph">D</span>
+            </button>
+
+            <button
+              class="icon-btn"
+              id="notificationBtn"
+              type="button"
+              aria-label="Notificaciones"
+            >
+              <span class="notification-dot" id="notificationDot"></span>
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                  d="M15 17h5l-1.4-1.4a2 2 0 0 1-.6-1.4V11a6 6 0 1 0-12 0v3.2a2 2 0 0 1-.6 1.4L4 17h5"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M9 17a3 3 0 0 0 6 0"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
+
+            <button class="profile-btn" id="profileBtn" type="button">
+              <span id="profileName">Cuenta de demostracion</span>
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                  d="M20 21a8 8 0 1 0-16 0"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                />
+                <circle
+                  cx="12"
+                  cy="7"
+                  r="4"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                />
+              </svg>
+            </button>
+          </div>
+        </header>
+
+        <main class="view-container" id="viewContainer"></main>
+
+        <footer class="footer-credit">
+          QualyTech | Desarrollo: Ortiz Bayon Jose Francisco y Medina Ornelas
+          Cesar Oswaldo
+        </footer>
+      </div>
+    </div>
+
+    <div class="modal-backdrop hidden" id="modalBackdrop" aria-hidden="true">
+      <section
+        class="modal"
+        id="mainModal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modalTitle"
+      >
+        <header class="modal-header">
+          <h2 id="modalTitle">Formulario</h2>
+          <button
+            type="button"
+            class="icon-btn"
+            id="modalCloseBtn"
+            aria-label="Cerrar modal"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                d="M18 6 6 18M6 6l12 12"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+              />
+            </svg>
+          </button>
+        </header>
+        <div class="modal-body" id="modalBody"></div>
+      </section>
+    </div>
+
+    <template id="profileSettingsTemplate">
+      <form id="accountForm" class="form-grid">
+        <label>
+          Nombre completo
+          <input type="text" name="name" required minlength="3" />
+        </label>
+        <label>
+          Correo
+          <input type="email" name="email" required />
+        </label>
+        <label>
+          Nueva contrasena
+          <input
+            type="password"
+            name="password"
+            minlength="6"
+            placeholder="Opcional"
+          />
+        </label>
+        <button type="submit" class="btn-primary">Guardar cambios</button>
+      </form>
+    </template>
+
+    <template id="therapistFormTemplate">
+      <form id="therapistForm" class="form-grid split">
+        <label>
+          Rol de cuenta
+          <input type="text" name="role" value="Terapeuta" readonly />
+        </label>
+        <label>
+          Cedula profesional
+          <input
+            type="text"
+            name="professionalLicense"
+            required
+            pattern="\d{7,8}"
+            maxlength="8"
+          />
+        </label>
+        <label>
+          CURP
+          <input
+            type="text"
+            name="curp"
+            required
+            maxlength="18"
+            minlength="18"
+          />
+        </label>
+        <label>
+          Nombres
+          <input type="text" name="firstNames" required minlength="2" />
+        </label>
+        <label>
+          Apellido paterno
+          <input type="text" name="lastNamePaternal" required minlength="2" />
+        </label>
+        <label>
+          Apellido materno
+          <input type="text" name="lastNameMaternal" required minlength="2" />
+        </label>
+        <label>
+          Fecha de nacimiento
+          <input type="date" name="birthDate" required />
+        </label>
+        <label>
+          Telefono de contacto
+          <input
+            type="tel"
+            name="phone"
+            required
+            maxlength="10"
+            pattern="\d{10}"
+          />
+        </label>
+        <label>
+          Correo
+          <input type="email" name="email" required />
+        </label>
+        <label>
+          Nombre de usuario
+          <input
+            type="text"
+            name="username"
+            required
+            minlength="4"
+            maxlength="40"
+            pattern="[A-Za-z0-9_.-]{4,40}"
+            placeholder="usuario.terapeuta"
+          />
+        </label>
+        <label>
+          Direccion
+          <input type="text" name="address" required minlength="10" />
+        </label>
+        <label>
+          Especializacion clinica
+          <input type="text" name="specialization" required minlength="5" />
+        </label>
+        <label>
+          Certificaciones relevantes
+          <input type="text" name="certifications" required minlength="5" />
+        </label>
+        <label>
+          Anios de experiencia
+          <input
+            type="number"
+            name="experienceYears"
+            required
+            min="0"
+            max="60"
+          />
+        </label>
+        <label>
+          Institucion de egreso
+          <input type="text" name="institution" required minlength="4" />
+        </label>
+        <label>
+          Numero de licencia sanitaria (si aplica)
+          <input type="text" name="healthLicense" minlength="5" />
+        </label>
+        <label>
+          Contacto de emergencia
+          <input type="text" name="emergencyContact" required minlength="6" />
+        </label>
+        <label>
+          Telefono de emergencia
+          <input
+            type="tel"
+            name="emergencyPhone"
+            required
+            maxlength="10"
+            pattern="\d{10}"
+          />
+        </label>
+        <label>
+          Contrasena de acceso
+          <input
+            type="password"
+            name="password"
+            required
+            minlength="10"
+            placeholder="Minimo 10 caracteres"
+          />
+        </label>
+        <label>
+          Confirmar contrasena
+          <input
+            type="password"
+            name="confirmPassword"
+            required
+            minlength="10"
+          />
+        </label>
+        <label class="full-width">
+          <input type="checkbox" name="privacyConsent" required />
+          Confirmo aviso de privacidad, uso de datos clinicos y autenticacion
+          segura.
+        </label>
+        <p class="form-help full-width">
+          Solo se crean cuentas de tipo Terapeuta. No se permite alta de cuentas
+          Administrador desde este formulario.
+        </p>
+        <button type="submit" class="btn-primary">Guardar terapeuta</button>
+      </form>
+    </template>
+
+    <template id="patientFormTemplate">
+      <form id="patientForm" class="form-grid split">
+        <label>
+          Nombres
+          <input type="text" name="firstNames" required minlength="2" />
+        </label>
+        <label>
+          Apellido paterno
+          <input type="text" name="lastNamePaternal" required minlength="2" />
+        </label>
+        <label>
+          Apellido materno
+          <input type="text" name="lastNameMaternal" required minlength="2" />
+        </label>
+        <label>
+          Fecha de nacimiento
+          <input type="date" name="birthDate" required />
+        </label>
+        <label>
+          Telefono de contacto
+          <input
+            type="tel"
+            name="phone"
+            required
+            maxlength="10"
+            pattern="\d{10}"
+          />
+        </label>
+        <label>
+          Correo de contacto
+          <input type="email" name="email" />
+        </label>
+        <label>
+          Contrasena de acceso movil
+          <input
+            type="password"
+            name="accessPassword"
+            minlength="10"
+            placeholder="Minimo 10 caracteres"
+          />
+        </label>
+        <label>
+          Confirmar contrasena de acceso
+          <input
+            type="password"
+            name="confirmAccessPassword"
+            minlength="10"
+            placeholder="Repite la contrasena"
+          />
+        </label>
+        <label>
+          Diagnostico inicial
+          <input type="text" name="diagnosis" required minlength="6" />
+        </label>
+        <label>
+          Mano dominante
+          <select name="dominantHand" required>
+            <option value="">Selecciona una opcion</option>
+            <option value="Derecha">Derecha</option>
+            <option value="Izquierda">Izquierda</option>
+            <option value="Ambidiestra">Ambidiestra</option>
+          </select>
+        </label>
+        <label>
+          Nivel de dolor base (0-10)
+          <input type="number" name="painLevel" min="0" max="10" required />
+        </label>
+        <label>
+          Contacto de emergencia
+          <input type="text" name="emergencyContact" required minlength="6" />
+        </label>
+        <label>
+          Telefono de emergencia
+          <input
+            type="tel"
+            name="emergencyPhone"
+            required
+            maxlength="10"
+            pattern="\d{10}"
+          />
+        </label>
+        <label class="full-width">
+          Direccion
+          <input type="text" name="address" required minlength="10" />
+        </label>
+        <label class="full-width">
+          Antecedentes medicos relevantes
+          <textarea name="medicalHistory" rows="3" required></textarea>
+        </label>
+        <label class="full-width">
+          Comorbilidades
+          <textarea
+            name="comorbidities"
+            rows="2"
+            placeholder="Ejemplo: diabetes, hipertension"
+          ></textarea>
+        </label>
+        <label class="full-width">
+          Medicamentos actuales
+          <textarea name="medications" rows="2"></textarea>
+        </label>
+        <label class="full-width">
+          Alergias
+          <textarea name="allergies" rows="2"></textarea>
+        </label>
+        <label class="full-width">
+          Limitaciones funcionales observadas
+          <textarea name="functionalLimitations" rows="2" required></textarea>
+        </label>
+        <label class="full-width">
+          Objetivos terapeuticos
+          <textarea name="therapyGoals" rows="2" required></textarea>
+        </label>
+        <label class="full-width">
+          Preferencias del paciente (horario / tipo de sesion)
+          <textarea name="preferences" rows="2"></textarea>
+        </label>
+        <label class="full-width">
+          Contraindicaciones y alertas de seguridad
+          <textarea name="contraindications" rows="2"></textarea>
+        </label>
+        <label class="full-width">
+          <input type="checkbox" name="dataConsent" required />
+          Confirmo consentimiento informado para tratamiento y uso de datos
+          clinicos.
+        </label>
+        <button type="submit" class="btn-primary">Guardar paciente</button>
+      </form>
+    </template>
+
+    <script src="js/web-state-store.js"></script>
+    <script src="js/dashboard.js"></script>
+  </body>
+</html>

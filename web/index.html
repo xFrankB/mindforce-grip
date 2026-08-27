@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MindForce Grip - Iniciar Sesión</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/login.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-config.js"></script>
+  </head>
+
+  <body>
+    <button
+      type="button"
+      class="theme-toggle"
+      id="themeToggle"
+      aria-label="Cambiar tema"
+    >
+      <i class="fa-solid fa-moon" id="themeToggleIcon" aria-hidden="true"></i>
+    </button>
+
+    <div class="login-container">
+      <div class="login-card">
+        <div class="logo-container">
+          <img
+            src="MindForce Grip-logo.jpg"
+            alt="MindForce Grip"
+            class="logo"
+          />
+        </div>
+
+        <h1>Iniciar Sesión</h1>
+        <p class="subtitle">Accede a tu cuenta MindForce Grip</p>
+
+        <form id="loginForm">
+          <div class="form-group">
+            <label for="no_admin">Usuario</label>
+            <input
+              type="text"
+              id="no_admin"
+              placeholder="usuario o correo"
+              required
+              autocomplete="username"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="contrasena">Contraseña</label>
+            <div class="password-field">
+              <input
+                type="password"
+                id="contrasena"
+                placeholder="Tu contraseña"
+                required
+                autocomplete="current-password"
+              />
+              <button
+                type="button"
+                class="password-toggle"
+                id="togglePassword"
+                aria-label="Mostrar contraseña"
+                aria-pressed="false"
+              >
+                <i
+                  class="fa-solid fa-eye password-toggle-icon"
+                  aria-hidden="true"
+                ></i>
+              </button>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-login">Entrar</button>
+        </form>
+
+        <div class="welcome-message" id="welcomeMessage"></div>
+        <div class="debug-info" id="debugInfo"></div>
+
+        <div class="divider"></div>
+
+        <div class="footer-link">
+          ¿No tienes cuenta? <a href="register.html">Crear nueva</a>
+        </div>
+      </div>
+    </div>
+
+    <script src="js/login.js"></script>
+  </body>
+</html>
