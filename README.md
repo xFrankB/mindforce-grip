@@ -28,6 +28,12 @@ Las siguientes capturas fueron obtenidas ejecutando las aplicaciones con datos d
 
 La exportación de historial está implementada en la aplicación móvil dentro de `PacientePerfilScreen`. La acción **Descargar historial médico** construye un documento mediante el paquete `pdf` y abre el flujo de impresión o guardado mediante `printing`. El panel web documentado en este repositorio gestiona los flujos web de acceso, registro y administración; no se presenta como generador PDF para evitar atribuirle una capacidad que no está implementada en esa interfaz.
 
+
+| Vista previa del historial generado |
+|---|
+| ![Vista previa del PDF de historial de MindForce Grip](docs/screenshots/historial-mindforce-demo-preview.png) |
+
+La vista previa corresponde al documento PDF generado con los mismos campos mostrados en la pantalla de perfil y con datos de demostración anonimizados. Puedes consultar el archivo resultante en [historial-mindforce-demo.pdf](docs/screenshots/historial-mindforce-demo.pdf).
 ## Estructura del proyecto
 
 ```text
