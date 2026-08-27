@@ -16,6 +16,18 @@ MindForce Grip es un prototipo académico compuesto por una aplicación web y un
 |---|---|
 | ![Inicio de sesión de MindForce Grip](docs/screenshots/login.webp) | ![Registro de terapeutas de MindForce Grip](docs/screenshots/registro-terapeutas.webp) |
 
+## Evidencias de ejecución
+
+Las siguientes capturas fueron obtenidas ejecutando las aplicaciones con datos de demostración anonimizados. Se incluyen la pantalla de acceso móvil y el perfil móvil porque muestran el flujo de entrada, el seguimiento del progreso y las acciones disponibles para el paciente.
+
+| Acceso móvil | Perfil móvil y exportación |
+|---|---|
+| ![Inicio de sesión móvil de MindForce Grip](docs/screenshots/mobile-login.webp) | ![Perfil móvil con acción de descarga PDF](docs/screenshots/mobile-profile-pdf.webp) |
+
+## Reportes PDF
+
+La exportación de historial está implementada en la aplicación móvil dentro de `PacientePerfilScreen`. La acción **Descargar historial médico** construye un documento mediante el paquete `pdf` y abre el flujo de impresión o guardado mediante `printing`. El panel web documentado en este repositorio gestiona los flujos web de acceso, registro y administración; no se presenta como generador PDF para evitar atribuirle una capacidad que no está implementada en esa interfaz.
+
 ## Estructura del proyecto
 
 ```text
