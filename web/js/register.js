@@ -1,10 +1,10 @@
-const SUPABASE_URL =
-  window.MIND_FORCE_SUPABASE?.url || 'https://jdgqsodglxuazxihhqgq.supabase.co';
-const SUPABASE_ANON_KEY =
-  window.MIND_FORCE_SUPABASE?.anonKey ||
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpkZ3Fzb2RnbHh1YXp4aWhocWdxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYwODU4ODUsImV4cCI6MjA5MTY2MTg4NX0.3Z2FbXxFewH8zCkeFbA29jzf0tdbbkVUxiFQmiRre_I';
+const SUPABASE_URL = window.MIND_FORCE_SUPABASE?.url || '';
+const SUPABASE_ANON_KEY = window.MIND_FORCE_SUPABASE?.anonKey || '';
+const HAS_SUPABASE_CONFIG = Boolean(SUPABASE_URL && SUPABASE_ANON_KEY);
 
-const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const supabaseClient = HAS_SUPABASE_CONFIG && typeof supabase !== 'undefined'
+  ? supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+  : null;
 
 const registerForm = document.getElementById('registerForm');
 const welcomeMessage = document.getElementById('welcomeMessage');
@@ -96,6 +96,11 @@ async function handleRegister(e) {
   };
 
   if (!validateForm(payload)) {
+    return;
+  }
+
+  if (!supabaseClient) {
+    showError('La conexión de Supabase debe configurarse antes de enviar una solicitud.');
     return;
   }
 

@@ -1,17 +1,15 @@
-const SUPABASE_URL =
-  window.MIND_FORCE_SUPABASE?.url || 'https://jdgqsodglxuazxihhqgq.supabase.co';
-const SUPABASE_ANON_KEY =
-  window.MIND_FORCE_SUPABASE?.anonKey ||
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpkZ3Fzb2RnbHh1YXp4aWhocWdxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYwODU4ODUsImV4cCI6MjA5MTY2MTg4NX0.3Z2FbXxFewH8zCkeFbA29jzf0tdbbkVUxiFQmiRre_I';
+const SUPABASE_URL = window.MIND_FORCE_SUPABASE?.url || '';
+const SUPABASE_ANON_KEY = window.MIND_FORCE_SUPABASE?.anonKey || '';
+const HAS_SUPABASE_CONFIG = Boolean(SUPABASE_URL && SUPABASE_ANON_KEY);
 const DASHBOARD_SESSION_STORAGE_KEY = 'mindforce_dashboard_session';
 
-const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+const supabaseClient = HAS_SUPABASE_CONFIG && typeof supabase !== 'undefined' ? supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
   auth: {
     persistSession: false,
     autoRefreshToken: false,
     detectSessionInUrl: false,
   },
-});
+}) : null;
 
 const loginForm = document.getElementById('loginForm');
 const welcomeMessage = document.getElementById('welcomeMessage');
@@ -85,6 +83,11 @@ async function handleLogin(e) {
 
   if (!loginInput || !contrasena) {
     showLoginNotification('Error: Ingresa usuario o correo y contraseña.', 'error');
+    return;
+  }
+
+  if (!supabaseClient) {
+    showLoginNotification('La conexión de Supabase debe configurarse antes de iniciar sesión.', 'error');
     return;
   }
 

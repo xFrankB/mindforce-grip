@@ -30,13 +30,11 @@ const SUPABASE_TABLES = {
   patients: 'pacientes',
   appointments: 'citas',
 };
-const SUPABASE_URL =
-  window.MIND_FORCE_SUPABASE?.url || 'https://jdgqsodglxuazxihhqgq.supabase.co';
-const SUPABASE_ANON_KEY =
-  window.MIND_FORCE_SUPABASE?.anonKey ||
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpkZ3Fzb2RnbHh1YXp4aWhocWdxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYwODU4ODUsImV4cCI6MjA5MTY2MTg4NX0.3Z2FbXxFewH8zCkeFbA29jzf0tdbbkVUxiFQmiRre_I';
+const SUPABASE_URL = window.MIND_FORCE_SUPABASE?.url || '';
+const SUPABASE_ANON_KEY = window.MIND_FORCE_SUPABASE?.anonKey || '';
+const HAS_SUPABASE_CONFIG = Boolean(SUPABASE_URL && SUPABASE_ANON_KEY);
 const supabaseDbClient =
-  typeof supabase !== 'undefined'
+  typeof supabase !== 'undefined' && HAS_SUPABASE_CONFIG
     ? supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
         auth: {
           persistSession: false,
@@ -46,7 +44,7 @@ const supabaseDbClient =
       })
     : null;
 const supabaseAuthClient =
-  typeof supabase !== 'undefined'
+  typeof supabase !== 'undefined' && HAS_SUPABASE_CONFIG
     ? supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
         auth: {
           persistSession: false,
